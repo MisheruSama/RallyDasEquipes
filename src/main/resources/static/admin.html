@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração - Rally das Equipes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="inv-bg">
+    <nav class="navbar navbar-expand-lg mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-flag-fill me-2"></i>
+                Rally das Equipes
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="bi bi-house-door-fill me-1"></i>
+                            Página Inicial
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="admin.html">
+                            <i class="bi bi-gear-fill me-1"></i>
+                            Administração
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h1 class="text-center mb-4">
+                    <i class="bi bi-trophy-fill me-2"></i>
+                    Gerenciar Equipes
+                </h1>
+            
+            <!-- Formulário para Adicionar/Editar Equipe -->
+            <div class="admin-card">
+                <h3 class="d-flex align-items-center">
+                    <i class="bi bi-pencil-square me-2"></i>
+                    Adicionar/Editar Equipe
+                </h3>
+                <form id="equipeForm" class="admin-form">
+                    <input type="hidden" id="equipeId">
+                    <div class="form-group">
+                        <label for="nomeEquipe">
+                            <i class="bi bi-people-fill me-2"></i>
+                            Nome da Equipe
+                        </label>
+                        <input type="text" id="nomeEquipe" class="form-control" required 
+                               placeholder="Digite o nome da equipe">
+                    </div>
+                    <div class="form-group">
+                        <label for="nomeLider">
+                            <i class="bi bi-person-fill me-2"></i>
+                            Nome do Líder
+                        </label>
+                        <input type="text" id="nomeLider" class="form-control" required 
+                               placeholder="Digite o nome do líder">
+                    </div>
+                    <div class="form-group">
+                        <label for="fotoLider">
+                            <i class="bi bi-image-fill me-2"></i>
+                            Caminho da Foto do Líder
+                        </label>
+                        <input type="text" id="fotoLider" class="form-control" required 
+                               placeholder="Digite o caminho da foto (ex: imagem/foto.jpg)">
+                    </div>
+                    <div class="form-group">
+                        <label for="pontos">
+                            <i class="bi bi-star-fill me-2"></i>
+                            Pontos
+                        </label>
+                        <input type="number" id="pontos" class="form-control" required min="0" 
+                               placeholder="Digite a pontuação">
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-secondary" onclick="limparFormulario()">
+                            <i class="bi bi-x-lg me-2"></i>
+                            Limpar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save-fill me-2"></i>
+                            Salvar Equipe
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tabela de Equipes -->
+            <div class="admin-card mt-4">
+                <h3 class="d-flex align-items-center">
+                    <i class="bi bi-table me-2"></i>
+                    Equipes Cadastradas
+                </h3>
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <i class="bi bi-trophy me-2"></i>
+                                    Posição
+                                </th>
+                                <th scope="col">
+                                    <i class="bi bi-image me-2"></i>
+                                    Foto
+                                </th>
+                                <th scope="col">
+                                    <i class="bi bi-people me-2"></i>
+                                    Equipe
+                                </th>
+                                <th scope="col">
+                                    <i class="bi bi-person me-2"></i>
+                                    Líder
+                                </th>
+                                <th scope="col">
+                                    <i class="bi bi-star me-2"></i>
+                                    Pontos
+                                </th>
+                                <th scope="col">
+                                    <i class="bi bi-gear me-2"></i>
+                                    Ações
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-table-body">
+                            <!-- Dados serão inseridos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
