@@ -76,7 +76,7 @@ function carregarRanking() {
                     <td class="equipe-cell">
                         <div class="d-flex align-items-center">
                             <img src="${equipe.foto_do_lider}" alt="Foto do líder ${equipe.nome_do_lider}" 
-                                class="leader-photo leader-border me-3 rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+                                class="leader-photo leader-border me-3 rounded-circle">
                                 <div>
                                 <div class="fw-bold">${equipe.nome_da_equipe}</div>
                                 <small style="color: var(--inv-amarelo)">Líder: ${equipe.nome_do_lider}</small>
@@ -88,11 +88,9 @@ function carregarRanking() {
                         ${index === 0 ? '<i class="bi bi-trophy-fill text-warning ms-2"></i>' : ''}
                     </td>
                     <td class="text-center">
-                        <img src="${equipe.tribo || 'imagem/default-avatar.png'}" 
+                        <img src="${equipe.tribo}" 
                              alt="Foto da tribo" 
-                             class="leader-photo tribe-photo"
-                             onerror="this.src='imagem/default-avatar.png'"
-                             style="width: 60px; height: 60px; object-fit: cover;">
+                             class="leader-photo tribe-photo">
                     </td>
                 `;
                 
@@ -120,15 +118,10 @@ async function compartilharRanking() {
         // Clonar o conteúdo do ranking
         const rankingContent = document.querySelector('.ranking-container').cloneNode(true);
 
-        // Ajustar os caminhos das imagens para usar o novo controller
+        // Preparar as imagens para captura
         const images = rankingContent.getElementsByTagName('img');
         Array.from(images).forEach(img => {
-            const currentSrc = img.src;
-            if (currentSrc.includes('imagem/')) {
-                const filename = currentSrc.split('imagem/')[1];
-                img.src = `/imagem/${filename}`;
-                img.crossOrigin = 'anonymous';
-            }
+            img.crossOrigin = 'anonymous';
         });
 
         tempContainer.appendChild(rankingContent);
