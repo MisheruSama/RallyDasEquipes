@@ -1,4 +1,3 @@
-
 // Configuração do Swiper (Carrossel)
 let swiper;
 
@@ -87,8 +86,7 @@ function carregarRanking() {
                     <td class="equipe-cell">
                         <div class="d-flex align-items-center">
                             <img src="${equipe.foto_do_lider}" alt="Foto do líder ${equipe.nome_do_lider}" 
-                                class="leader-photo leader-border me-3 rounded-circle" 
-                                loading="lazy">
+                                class="leader-photo leader-border me-3 rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
                                 <div>
                                 <div class="fw-bold">${equipe.nome_da_equipe}</div>
                                 <small style="color: var(--inv-amarelo)">Líder: ${equipe.nome_do_lider}</small>
@@ -116,11 +114,10 @@ function carregarRanking() {
 
 // Função para compartilhar o ranking como imagem
 async function compartilharRanking() {
-    const button = document.querySelector('button[onclick="compartilharRanking()"]');
-    const originalText = button.innerHTML;
-    
     try {
         // Atualizar o botão para mostrar progresso
+        const button = document.querySelector('button[onclick="compartilharRanking()"]');
+        const originalText = button.innerHTML;
         button.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Gerando imagem...';
         button.disabled = true;
 
@@ -128,75 +125,62 @@ async function compartilharRanking() {
         const tempContainer = document.createElement('div');
         tempContainer.style.backgroundColor = '#1A1A1A';
         tempContainer.style.padding = '30px';
-        tempContainer.style.width = '1000px';
+        tempContainer.style.width = '1000px'; // Aumentado para 1000px
         
         // Clonar o conteúdo do ranking
         const rankingContent = document.querySelector('.ranking-container').cloneNode(true);
 
-        // Preparar as imagens para captura
+        // Ajustar os caminhos das imagens para usar o novo controller
         const images = rankingContent.getElementsByTagName('img');
-        const imageArray = Array.from(images);
-        
-        // Converter URLs e adicionar crossOrigin
-        for (const img of imageArray) {
-            img.dataset.originalSrc = img.src;
+        Array.from(images).forEach(img => {
             const currentSrc = img.src;
-            
-            // Verificar se a URL já é absoluta
-            if (currentSrc.startsWith('http') || currentSrc.startsWith('https')) {
-                img.crossOrigin = 'anonymous';
-                continue; // Manter a URL absoluta
-            }
-            
-            // Para URLs relativas, construir a URL absoluta
-            let filename;
             if (currentSrc.includes('imagem/')) {
-                filename = currentSrc.split('imagem/')[1].split('?')[0];
-            } else {
-                filename = currentSrc.split('/').pop().split('?')[0];
+                const filename = currentSrc.split('imagem/')[1];
+                img.src = `/imagem/${filename}`;
+                img.crossOrigin = 'anonymous';
             }
-            
-            // Determinar a URL base do servidor
-            const baseUrl = window.location.origin;
-            
-            img.crossOrigin = 'anonymous';
-            img.src = `${baseUrl}/imagem/${filename}`;
-        }
+        });
 
         tempContainer.appendChild(rankingContent);
+        
+        // Adicionar o container temporário ao documento
         document.body.appendChild(tempContainer);
 
-        // Aguardar carregamento das imagens
+        // Aguardar um momento para garantir que tudo está renderizado
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Capturar a imagem
+        // Capturar a imagem com configurações otimizadas
         const canvas = await html2canvas(tempContainer, {
             backgroundColor: '#1A1A1A',
-            scale: 2.5,
+            scale: 2.5, // Aumentado para 2.5 para melhor qualidade
             useCORS: true,
             allowTaint: false,
             logging: true,
             imageTimeout: 0
         });
 
-        // Limpar e restaurar
+        // Remove o container temporário
         document.body.removeChild(tempContainer);
-        
-        // Criar e acionar download
+
+        // Converte o canvas para uma URL de dados JPEG
         const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
         const link = document.createElement('a');
         link.href = dataUrl;
         link.download = 'ranking-rally-das-equipes.jpg';
+        
+        // Adicionar à página e clicar
         document.body.appendChild(link);
         link.click();
+        
+        // Limpar
         document.body.removeChild(link);
-
     } catch (error) {
         console.error('Erro ao gerar imagem:', error);
         alert('Erro ao gerar a imagem do ranking.');
     } finally {
         // Restaurar o botão
-        button.innerHTML = originalText;
+        const button = document.querySelector('button[onclick="compartilharRanking()"]');
+        button.innerHTML = '<i class="bi bi-share-fill me-2"></i>Compartilhar Ranking';
         button.disabled = false;
     }
 }

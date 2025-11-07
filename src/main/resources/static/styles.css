@@ -539,19 +539,8 @@ section p {
     }
 
     .leader-photo {
-        width: 45px !important;
-        height: 45px !important;
-    }
-
-    /* Ajuste para garantir que a foto apareça em todas as posições */
-    .position-1 .leader-photo,
-    .position-2 .leader-photo,
-    .position-3 .leader-photo {
-        width: 45px !important;
-        height: 45px !important;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
+        width: 30px;
+        height: 30px;
     }
 }
 
@@ -571,19 +560,8 @@ section p {
     }
 
     .leader-photo {
-        width: 40px !important;
-        height: 40px !important;
-    }
-
-    /* Ajuste para garantir que a foto apareça em todas as posições */
-    .position-1 .leader-photo,
-    .position-2 .leader-photo,
-    .position-3 .leader-photo {
-        width: 40px !important;
-        height: 40px !important;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
+        width: 25px;
+        height: 25px;
     }
 }
 
