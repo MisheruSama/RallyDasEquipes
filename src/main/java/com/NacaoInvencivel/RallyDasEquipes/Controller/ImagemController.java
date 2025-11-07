@@ -31,10 +31,7 @@ public class ImagemController {
             try {
                 // Primeiro tenta como um recurso do classpath
                 resource = new ClassPathResource("static/imagem/" + filename);
-                if (!resource.exists()) {
-                    // Tenta como caminho relativo
-                    resource = new ClassPathResource("imagem/" + filename);
-                }
+                
             } catch (Exception e) {
                 System.err.println("Erro ao buscar imagem: " + e.getMessage());
                 return ResponseEntity.notFound().build();
@@ -72,17 +69,6 @@ public class ImagemController {
             return MediaType.IMAGE_GIF_VALUE;
         }
         return MediaType.IMAGE_JPEG_VALUE; // default to JPEG
-    }
-
-    @RequestMapping(method = RequestMethod.OPTIONS)
-    public ResponseEntity<?> options() {
-        return ResponseEntity
-            .ok()
-            .header("Access-Control-Allow-Origin", "*")
-            .header("Access-Control-Allow-Methods", "GET")
-            .header("Access-Control-Allow-Headers", "*")
-            .header("Access-Control-Max-Age", "3600")
-            .build();
     }
     
     @ExceptionHandler(Exception.class)

@@ -1,26 +1,7 @@
-// Função para garantir URL correta da imagem
-function ensureImageUrl(url) {
-    if (!url) return 'static/imagem/default-avatar.png';
-    
-    // Se já for uma URL absoluta, retorna como está
-    if (url.startsWith('http') || url.startsWith('https')) {
-        return url;
-    }
-    
-    // Se começar com barra, remove para evitar dupla barra
-    const cleanUrl = url.startsWith('/') ? url.substring(1) : url;
-    
-    // Se já tiver o prefixo 'imagem/', usa direto, senão adiciona
-    if (cleanUrl.startsWith('static/imagem/')) {
-        return cleanUrl;
-    }
-    
-    return `static/imagem/${cleanUrl}`;
-}
 
 // Função para lidar com erros de carregamento de imagem
 function handleImageError(img) {
-    img.src = 'imagem/default-avatar.png';
+    img.src = 'staticimagem/default-avatar.png';
 }
 
 // Configuração do Swiper (Carrossel)
