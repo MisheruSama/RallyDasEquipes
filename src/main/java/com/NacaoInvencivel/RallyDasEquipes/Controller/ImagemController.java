@@ -20,14 +20,28 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.OPTIONS})
 public class ImagemController {
 
-    @GetMapping({"/{filename}", "/static/imagem/{filename}"})
+    @GetMapping("/{filename}")
     public ResponseEntity<byte[]> getImage(@PathVariable String filename) {
         try {
             // Sanitize filename to prevent path traversal
             filename = filename.replaceAll("[^a-zA-Z0-9.-]", "");
             
-            Resource resource = new ClassPathResource("static/imagem/" + filename);
+            // Tentar encontrar o arquivo em diferentes locais
+            Resource resource;
+            try {
+                // Primeiro tenta como um recurso do classpath
+                resource = new ClassPathResource("static/imagem/" + filename);
+                if (!resource.exists()) {
+                    // Tenta como caminho relativo
+                    resource = new ClassPathResource("imagem/" + filename);
+                }
+            } catch (Exception e) {
+                System.err.println("Erro ao buscar imagem: " + e.getMessage());
+                return ResponseEntity.notFound().build();
+            }
+            
             if (!resource.exists()) {
+                System.err.println("Imagem não encontrada: " + filename);
                 return ResponseEntity.notFound().build();
             }
             
