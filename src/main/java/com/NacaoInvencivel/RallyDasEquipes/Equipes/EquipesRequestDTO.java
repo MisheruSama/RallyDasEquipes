@@ -1,5 +1,5 @@
 package com.NacaoInvencivel.RallyDasEquipes.Equipes;
 
-public record EquipesRequestDTO(String nome_da_equipe, String nome_do_lider, String foto_do_lider, int ponto) {
+public record EquipesRequestDTO(String nome_da_equipe, String nome_do_lider, String foto_do_lider, int ponto, String tribo) {
 
 }

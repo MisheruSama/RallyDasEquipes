@@ -3,6 +3,7 @@ package com.NacaoInvencivel.RallyDasEquipes.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ public class EquipesController {
     @Autowired
     private EquipesRepository repository;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @GetMapping
     public List<EquipesResponseDTO> getAll(){
         List<EquipesResponseDTO> equipesList = repository.findAll().stream().map(EquipesResponseDTO::new).toList();
@@ -34,7 +36,6 @@ public class EquipesController {
 public void saveEquipe(@RequestBody EquipesRequestDTO data){
     Equipes equipesData = new Equipes(data);
     repository.save(equipesData);
-    return;
 
 }
 @PutMapping("/atualizar/{id}")
@@ -43,7 +44,6 @@ public void saveEquipe(@RequestBody EquipesRequestDTO data){
         Equipes equipesData = new Equipes(data);
         equipesData.setId(id);
         repository.save(equipesData);
-        return;
     }
 }
 
@@ -51,7 +51,6 @@ public void saveEquipe(@RequestBody EquipesRequestDTO data){
     public void deleteEquipe(@PathVariable Long id){
     if(repository.existsById(id)){
         repository.deleteById(id);
-        return;
     }
 }
 }

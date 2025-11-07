@@ -70,6 +70,134 @@ h1 {
     z-index: 1000;
 }
 
+/* Estilos da tabela de ranking */
+.ranking-container .table {
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid var(--inv-cinza-escuro);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.ranking-container thead th {
+    background-color: var(--inv-cinza-escuro);
+    color: var(--inv-amarelo);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--inv-amarelo);
+    padding: 1rem;
+}
+
+.ranking-container tbody tr {
+    transition: all 0.3s ease;
+}
+
+.ranking-container tbody tr:hover {
+    background-color: rgba(245, 178, 27, 0.1) !important;
+    transform: scale(1.01);
+}
+
+.ranking-container tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+/* Estilos para os três primeiros lugares */
+.ranking-container .position-medal {
+    font-weight: bold;
+    font-size: 1.1rem;
+    background: none !important;
+}
+
+.ranking-container .position-1 {
+    color: #FFD700; /* Dourado */
+}
+
+.ranking-container .position-2 {
+    color: #C0C0C0; /* Prata */
+}
+
+.ranking-container .position-3 {
+    color: #CD7F32; /* Bronze */
+}
+
+/* Remover fundo escuro da tabela */
+.ranking-container .table {
+    background: none !important;
+    border: none !important;
+}
+
+.ranking-container .table-dark {
+    background-color: transparent !important;
+}
+
+.ranking-container tbody tr {
+    background-color: transparent !important;
+}
+
+.ranking-container tbody td {
+    background-color: transparent !important;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Título do Ranking */
+.ranking-title {
+    color: var(--inv-amarelo);
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilos para captura de imagem */
+.ranking-container.capturing {
+    padding: 40px;
+    border-radius: 15px;
+    background-color: #1A1A1A !important;
+    border: 2px solid var(--inv-amarelo);
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.ranking-container.capturing .table {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.ranking-container.capturing .table td,
+.ranking-container.capturing .table th {
+    padding: 1rem 1.5rem;
+}
+
+.ranking-container.capturing .equipe-cell {
+    min-width: 300px;
+}
+
+.ranking-container .leader-photo {
+    width: 60px !important;
+    height: 60px !important;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    border: 2px solid var(--inv-amarelo);
+}
+
+.ranking-container .tribe-photo {
+    border: none !important;
+}
+
+.ranking-container .leader-photo:hover {
+    transform: scale(1.1);
+}
+
+.ranking-container .bi-trophy-fill {
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+}
+
 .navbar-brand {
     color: var(--inv-amarelo) !important;
     font-family: var(--font-family);

@@ -29,10 +29,13 @@ public class Equipes {
 
     private int ponto;
 
+    private String tribo;
+
     public Equipes(EquipesRequestDTO data){
         this.nome_da_equipe = data.nome_da_equipe();
         this.nome_do_lider = data.nome_do_lider();
         this.foto_do_lider = data.foto_do_lider();
         this.ponto = data.ponto();
+        this.tribo = data.tribo();
     }
 }

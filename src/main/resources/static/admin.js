@@ -34,14 +34,13 @@ function carregarEquipes() {
                 const posicao = index + 1;
                 let medalha = '';
                 
-                // Adicionar medalhas para os primeiros lugares
-                if (posicao === 1) medalha = '🥇';
-                else if (posicao === 2) medalha = '🥈';
-                else if (posicao === 3) medalha = '🥉';
+                // Removida a parte das medalhas
                 
                 row.innerHTML = `
-                    <td>
-                        ${posicao}º ${medalha}
+                    <td class="text-center">
+                        <span class="position-medal ${index < 3 ? `position-${index + 1}` : ''}">
+                            ${posicao}º
+                        </span>
                     </td>
                     <td>
                         <img src="${equipe.foto_do_lider}" 
@@ -56,6 +55,13 @@ function carregarEquipes() {
                             <i class="bi bi-star-fill me-1"></i>
                             ${equipe.ponto}
                         </span>
+                    </td>
+                    <td class="text-center">
+                        <img src="${equipe.tribo || 'imagem/default-avatar.png'}" 
+                             alt="Foto da tribo" 
+                             class="leader-photo tribe-photo"
+                             onerror="this.src='imagem/default-avatar.png'"
+                             style="width: 60px; height: 60px; object-fit: cover;">
                     </td>
                     <td>
                         <div class="btn-group" role="group">
@@ -106,7 +112,8 @@ function editarEquipe(id) {
         document.getElementById('nomeEquipe').value = equipe.cells[2].textContent; // Nome da equipe
         document.getElementById('nomeLider').value = equipe.cells[3].textContent; // Nome do líder
         document.getElementById('fotoLider').value = equipe.cells[1].querySelector('img').src; // Foto do líder
-        document.getElementById('pontos').value = equipe.cells[4].textContent.trim(); // Pontos
+        document.getElementById('pontos').value = equipe.cells[4].querySelector('.badge').textContent.trim(); // Pontos
+        document.getElementById('tribo').value = equipe.cells[5].querySelector('img').src; // Foto da tribo
         modoEdicao = true;
         
         // Rolar suavemente até o formulário
@@ -185,7 +192,8 @@ async function atualizarEquipe(id, equipeData) {
         nome_da_equipe: equipeData.nome_da_equipe,
         nome_do_lider: equipeData.nome_do_lider,
         foto_do_lider: equipeData.foto_do_lider,
-        ponto: parseInt(equipeData.ponto)
+        ponto: parseInt(equipeData.ponto),
+        tribo: equipeData.tribo
     };
 
     console.log('Dados formatados para atualização:', requestData);
@@ -224,7 +232,8 @@ async function cadastrarEquipe(equipeData) {
         nome_da_equipe: equipeData.nome_da_equipe,
         nome_do_lider: equipeData.nome_do_lider,
         foto_do_lider: equipeData.foto_do_lider,
-        ponto: parseInt(equipeData.ponto) // Garantindo que seja número
+        ponto: parseInt(equipeData.ponto), // Garantindo que seja número
+        tribo: equipeData.tribo
     };
 
     console.log('Dados formatados para cadastro:', requestData);
@@ -276,7 +285,8 @@ document.getElementById('equipeForm').addEventListener('submit', async function(
         nome_da_equipe: document.getElementById('nomeEquipe').value,
         nome_do_lider: document.getElementById('nomeLider').value,
         foto_do_lider: fotoPath,
-        ponto: pontos
+        ponto: pontos,
+        tribo: document.getElementById('tribo').value
     };
 
     const id = document.getElementById('equipeId').value;
