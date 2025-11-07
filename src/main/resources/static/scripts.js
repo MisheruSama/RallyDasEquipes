@@ -76,7 +76,8 @@ function carregarRanking() {
                     <td class="equipe-cell">
                         <div class="d-flex align-items-center">
                             <img src="${equipe.foto_do_lider}" alt="Foto do líder ${equipe.nome_do_lider}" 
-                                class="leader-photo leader-border me-3 rounded-circle">
+                                class="leader-photo leader-border me-3 rounded-circle"
+                                loading="lazy">
                                 <div>
                                 <div class="fw-bold">${equipe.nome_da_equipe}</div>
                                 <small style="color: var(--inv-amarelo)">Líder: ${equipe.nome_do_lider}</small>
@@ -90,7 +91,8 @@ function carregarRanking() {
                     <td class="text-center">
                         <img src="${equipe.tribo}" 
                              alt="Foto da tribo" 
-                             class="leader-photo tribe-photo">
+                             class="leader-photo tribe-photo"
+                             loading="lazy">
                     </td>
                 `;
                 
