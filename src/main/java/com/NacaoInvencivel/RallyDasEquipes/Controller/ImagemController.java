@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/imagem")
+@RequestMapping("/static/imagem")
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET})
 public class ImagemController {
 
