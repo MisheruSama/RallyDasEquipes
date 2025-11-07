@@ -1,33 +1,62 @@
 package com.NacaoInvencivel.RallyDasEquipes.Controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.io.IOException;
-import java.nio.file.Files;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/imagem")
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.OPTIONS})
 public class ImagemController {
 
     @GetMapping("/{filename}")
     public ResponseEntity<byte[]> getImage(@PathVariable String filename) {
         try {
+            // Sanitize filename to prevent path traversal
+            filename = filename.replaceAll("[^a-zA-Z0-9.-]", "");
+            
             Resource resource = new ClassPathResource("static/imagem/" + filename);
+            if (!resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+            
             byte[] imageBytes = Files.readAllBytes(resource.getFile().toPath());
+            String contentType = determineContentType(filename);
             
             return ResponseEntity
                 .ok()
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "GET, OPTIONS")
                 .header("Access-Control-Allow-Headers", "*")
-                .contentType(MediaType.IMAGE_JPEG)
+                .header("Cache-Control", "max-age=3600")
+                .contentType(MediaType.parseMediaType(contentType))
                 .body(imageBytes);
         } catch (IOException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    private String determineContentType(String filename) {
+        filename = filename.toLowerCase();
+        if (filename.endsWith(".jpg") || filename.endsWith(".jpeg")) {
+            return MediaType.IMAGE_JPEG_VALUE;
+        } else if (filename.endsWith(".png")) {
+            return MediaType.IMAGE_PNG_VALUE;
+        } else if (filename.endsWith(".gif")) {
+            return MediaType.IMAGE_GIF_VALUE;
+        }
+        return MediaType.IMAGE_JPEG_VALUE; // default to JPEG
     }
 
     @RequestMapping(method = RequestMethod.OPTIONS)
@@ -37,6 +66,15 @@ public class ImagemController {
             .header("Access-Control-Allow-Origin", "*")
             .header("Access-Control-Allow-Methods", "GET, OPTIONS")
             .header("Access-Control-Allow-Headers", "*")
+            .header("Access-Control-Max-Age", "3600")
             .build();
+    }
+    
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(Exception e) {
+        return ResponseEntity
+            .status(500)
+            .header("Access-Control-Allow-Origin", "*")
+            .body("Error processing image: " + e.getMessage());
     }
 }

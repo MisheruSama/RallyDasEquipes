@@ -114,10 +114,11 @@ function carregarRanking() {
 
 // Função para compartilhar o ranking como imagem
 async function compartilharRanking() {
+    const button = document.querySelector('button[onclick="compartilharRanking()"]');
+    const originalText = button.innerHTML;
+    
     try {
         // Atualizar o botão para mostrar progresso
-        const button = document.querySelector('button[onclick="compartilharRanking()"]');
-        const originalText = button.innerHTML;
         button.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Gerando imagem...';
         button.disabled = true;
 
@@ -125,62 +126,66 @@ async function compartilharRanking() {
         const tempContainer = document.createElement('div');
         tempContainer.style.backgroundColor = '#1A1A1A';
         tempContainer.style.padding = '30px';
-        tempContainer.style.width = '1000px'; // Aumentado para 1000px
+        tempContainer.style.width = '1000px';
         
         // Clonar o conteúdo do ranking
         const rankingContent = document.querySelector('.ranking-container').cloneNode(true);
 
-        // Ajustar os caminhos das imagens para usar o novo controller
+        // Preparar as imagens para captura
         const images = rankingContent.getElementsByTagName('img');
-        Array.from(images).forEach(img => {
+        const imageArray = Array.from(images);
+        
+        // Converter URLs e adicionar crossOrigin
+        for (const img of imageArray) {
+            img.dataset.originalSrc = img.src;
             const currentSrc = img.src;
+            
+            // Extrair o nome do arquivo da URL
+            let filename;
             if (currentSrc.includes('imagem/')) {
-                const filename = currentSrc.split('imagem/')[1];
-                img.src = `/imagem/${filename}`;
-                img.crossOrigin = 'anonymous';
+                filename = currentSrc.split('imagem/')[1].split('?')[0];
+            } else {
+                filename = currentSrc.split('/').pop().split('?')[0];
             }
-        });
+            
+            img.crossOrigin = 'anonymous';
+            img.src = `/imagem/${filename}`;
+        }
 
         tempContainer.appendChild(rankingContent);
-        
-        // Adicionar o container temporário ao documento
         document.body.appendChild(tempContainer);
 
-        // Aguardar um momento para garantir que tudo está renderizado
+        // Aguardar carregamento das imagens
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Capturar a imagem com configurações otimizadas
+        // Capturar a imagem
         const canvas = await html2canvas(tempContainer, {
             backgroundColor: '#1A1A1A',
-            scale: 2.5, // Aumentado para 2.5 para melhor qualidade
+            scale: 2.5,
             useCORS: true,
             allowTaint: false,
             logging: true,
             imageTimeout: 0
         });
 
-        // Remove o container temporário
+        // Limpar e restaurar
         document.body.removeChild(tempContainer);
-
-        // Converte o canvas para uma URL de dados JPEG
+        
+        // Criar e acionar download
         const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
         const link = document.createElement('a');
         link.href = dataUrl;
         link.download = 'ranking-rally-das-equipes.jpg';
-        
-        // Adicionar à página e clicar
         document.body.appendChild(link);
         link.click();
-        
-        // Limpar
         document.body.removeChild(link);
+
     } catch (error) {
         console.error('Erro ao gerar imagem:', error);
         alert('Erro ao gerar a imagem do ranking.');
     } finally {
         // Restaurar o botão
-        const button = document.querySelector('button[onclick="compartilharRanking()"]');
-        button.innerHTML = '<i class="bi bi-share-fill me-2"></i>Compartilhar Ranking';
+        button.innerHTML = originalText;
         button.disabled = false;
     }
 }
