@@ -32,14 +32,16 @@ public class EquipesController {
         return equipesList;
     }
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @PostMapping("/cadastrar")
 public void saveEquipe(@RequestBody EquipesRequestDTO data){
     Equipes equipesData = new Equipes(data);
     repository.save(equipesData);
-
 }
+
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @PutMapping("/atualizar/{id}")
-    public void updateEquipe(@PathVariable Long id, @RequestBody EquipesRequestDTO data){
+public void updateEquipe(@PathVariable Long id, @RequestBody EquipesRequestDTO data){
     if(repository.existsById(id)){
         Equipes equipesData = new Equipes(data);
         equipesData.setId(id);
@@ -47,8 +49,9 @@ public void saveEquipe(@RequestBody EquipesRequestDTO data){
     }
 }
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @DeleteMapping("/excluir/{id}")
-    public void deleteEquipe(@PathVariable Long id){
+public void deleteEquipe(@PathVariable Long id){
     if(repository.existsById(id)){
         repository.deleteById(id);
     }

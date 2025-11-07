@@ -186,17 +186,38 @@ function excluirEquipe(id) {
 async function atualizarEquipe(id, equipeData) {
     console.log('Atualizando equipe:', { id, data: equipeData });
 
-    // Criando o objeto que será enviado no corpo da requisição
-    const requestData = {
-        id: parseInt(id),
-        nome_da_equipe: equipeData.nome_da_equipe,
-        nome_do_lider: equipeData.nome_do_lider,
-        foto_do_lider: equipeData.foto_do_lider,
-        ponto: parseInt(equipeData.ponto),
-        tribo: equipeData.tribo
-    };
+    try {
+        // Criando o objeto que será enviado no corpo da requisição
+        const requestData = {
+            id: parseInt(id),
+            nome_da_equipe: equipeData.nome_da_equipe,
+            nome_do_lider: equipeData.nome_do_lider,
+            foto_do_lider: equipeData.foto_do_lider,
+            ponto: parseInt(equipeData.ponto),
+            tribo: equipeData.tribo
+        };
 
-    console.log('Dados formatados para atualização:', requestData);
+        console.log('Dados formatados para atualização:', requestData);
+
+        const response = await fetch(`/equipes/atualizar/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro ao atualizar equipe: ${response.status}`);
+        }
+
+        mostrarMensagem('Equipe atualizada com sucesso! ✅');
+        return true;
+    } catch (error) {
+        console.error('Erro ao atualizar:', error);
+        mostrarMensagem('Erro ao atualizar equipe: ' + error.message, 'danger');
+        return false;
+    }
 
     try {
         const response = await fetch(`/equipes/atualizar/${id}`, {
