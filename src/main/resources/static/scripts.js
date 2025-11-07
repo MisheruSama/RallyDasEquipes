@@ -15,12 +15,12 @@ function ensureImageUrl(url) {
         return cleanUrl;
     }
     
-    return `imagem/${cleanUrl}`;
+    return `static/imagem/${cleanUrl}`;
 }
 
 // Função para lidar com erros de carregamento de imagem
 function handleImageError(img) {
-    img.src = 'imagem/default-avatar.png';
+    img.src = 'static/imagem/default-avatar.png';
 }
 
 // Configuração do Swiper (Carrossel)

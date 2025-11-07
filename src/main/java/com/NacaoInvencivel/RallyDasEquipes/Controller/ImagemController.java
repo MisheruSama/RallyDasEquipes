@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/imagem")
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.OPTIONS})
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET})
 public class ImagemController {
 
     @GetMapping("/{filename}")
@@ -51,7 +51,7 @@ public class ImagemController {
             return ResponseEntity
                 .ok()
                 .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, OPTIONS")
+                .header("Access-Control-Allow-Methods", "GET")
                 .header("Access-Control-Allow-Headers", "*")
                 .header("Cache-Control", "public, max-age=31536000")
                 .header("Access-Control-Expose-Headers", "Content-Length")
@@ -79,7 +79,7 @@ public class ImagemController {
         return ResponseEntity
             .ok()
             .header("Access-Control-Allow-Origin", "*")
-            .header("Access-Control-Allow-Methods", "GET, OPTIONS")
+            .header("Access-Control-Allow-Methods", "GET")
             .header("Access-Control-Allow-Headers", "*")
             .header("Access-Control-Max-Age", "3600")
             .build();
