@@ -114,11 +114,7 @@ async function compartilharRanking() {
         // Criar um container temporário para a captura
         const tempContainer = document.createElement('div');
         tempContainer.style.backgroundColor = '#1A1A1A';
-        tempContainer.style.padding = '20px';
-        tempContainer.style.width = '1000px';
-        tempContainer.style.borderRadius = '20px';
-        tempContainer.style.border = '4px solid var(--inv-amarelo)';
-        tempContainer.style.margin = '0 auto';
+        tempContainer.style.width = '800px';
         
         // Clonar o conteúdo do ranking
         const rankingContent = document.querySelector('.ranking-container').cloneNode(true);
@@ -126,46 +122,37 @@ async function compartilharRanking() {
         // Aumentar o tamanho das fotos e texto na imagem compartilhada
         const styleOverrides = document.createElement('style');
         styleOverrides.textContent = `
-            .ranking-container {
-                transform: scale(1);
-                width: 100% !important;
-            }
-            .leader-photo {
-                width: 80px !important;
-                height: 80px !important;
-                min-width: 80px !important;
-                min-height: 80px !important;
-                border: 3px solid #F5B21B !important;
-            }
             .table {
                 width: 100% !important;
-                margin: 0 auto !important;
+                border-collapse: collapse !important;
+            }
+            .leader-photo {
+                width: 50px !important;
+                height: 50px !important;
+                min-width: 50px !important;
+                min-height: 50px !important;
+                border: 2px solid #F5B21B !important;
             }
             .table td {
-                font-size: 1.2rem !important;
-                padding: 1rem !important;
+                padding: 8px !important;
                 vertical-align: middle !important;
+                border-bottom: 1px solid #333 !important;
             }
             .table th {
-                font-size: 1.3rem !important;
-                padding: 1rem !important;
-                background-color: #4C4C4C !important;
-                color: #F5B21B !important;
+                padding: 8px !important;
+                background-color: #333 !important;
             }
             .fw-bold {
-                font-size: 1.3rem !important;
-                font-weight: 700 !important;
+                font-weight: bold !important;
             }
             .position-medal {
-                font-size: 1.4rem !important;
-                font-weight: 700 !important;
+                font-weight: bold !important;
             }
             small {
-                font-size: 1.2rem !important;
                 color: #F5B21B !important;
+                opacity: 0.8 !important;
             }
             .bi-trophy-fill {
-                font-size: 2rem !important;
                 color: #F5B21B !important;
             }
         `;
@@ -188,13 +175,12 @@ async function compartilharRanking() {
         // Capturar a imagem com configurações otimizadas
         const canvas = await html2canvas(tempContainer, {
             backgroundColor: '#1A1A1A',
-            scale: 3, // Aumentado para 3 para maior qualidade
+            scale: 2,
             useCORS: true,
             allowTaint: false,
-            logging: true,
-            imageTimeout: 0,
-            width: 1200, // Largura fixa
-            height: tempContainer.offsetHeight, // Altura automática
+            logging: false,
+            width: 800,
+            height: tempContainer.offsetHeight
         });
 
         // Remove o container temporário
