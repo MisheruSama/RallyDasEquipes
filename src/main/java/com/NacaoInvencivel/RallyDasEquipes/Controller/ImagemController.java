@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.OPTIONS})
 public class ImagemController {
 
-    @GetMapping("/{filename}")
+    @GetMapping({"/{filename}", "/static/imagem/{filename}"})
     public ResponseEntity<byte[]> getImage(@PathVariable String filename) {
         try {
             // Sanitize filename to prevent path traversal
@@ -39,7 +39,8 @@ public class ImagemController {
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "GET, OPTIONS")
                 .header("Access-Control-Allow-Headers", "*")
-                .header("Cache-Control", "max-age=3600")
+                .header("Cache-Control", "public, max-age=31536000")
+                .header("Access-Control-Expose-Headers", "Content-Length")
                 .contentType(MediaType.parseMediaType(contentType))
                 .body(imageBytes);
         } catch (IOException e) {

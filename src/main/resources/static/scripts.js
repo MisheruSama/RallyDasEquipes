@@ -85,8 +85,11 @@ function carregarRanking() {
                     </td>
                     <td class="equipe-cell">
                         <div class="d-flex align-items-center">
-                            <img src="${equipe.foto_do_lider}" alt="Foto do líder ${equipe.nome_do_lider}" 
-                                class="leader-photo leader-border me-3 rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+                            <img src="${ensureImageUrl(equipe.foto_do_lider)}" alt="Foto do líder ${equipe.nome_do_lider}" 
+                                class="leader-photo leader-border me-3 rounded-circle" 
+                                style="width: 60px; height: 60px; object-fit: cover;"
+                                onerror="this.onerror=null; handleImageError(this);" 
+                                loading="lazy">
                                 <div>
                                 <div class="fw-bold">${equipe.nome_da_equipe}</div>
                                 <small style="color: var(--inv-amarelo)">Líder: ${equipe.nome_do_lider}</small>
