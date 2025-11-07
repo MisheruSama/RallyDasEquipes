@@ -1,7 +1,7 @@
 
 // Função para lidar com erros de carregamento de imagem
 function handleImageError(img) {
-    img.src = 'staticimagem/default-avatar.png';
+    img.src = 'imagem/default-avatar.png';
 }
 
 // Configuração do Swiper (Carrossel)
@@ -91,7 +91,7 @@ function carregarRanking() {
                     </td>
                     <td class="equipe-cell">
                         <div class="d-flex align-items-center">
-                            <img src="${ensureImageUrl(equipe.foto_do_lider)}" alt="Foto do líder ${equipe.nome_do_lider}" 
+                            <img src="${equipe.foto_do_lider || 'imagem/default-avatar.png'}" alt="Foto do líder ${equipe.nome_do_lider}" 
                                 class="leader-photo leader-border me-3 rounded-circle" 
                                 onerror="this.onerror=null; handleImageError(this);" 
                                 loading="lazy">
