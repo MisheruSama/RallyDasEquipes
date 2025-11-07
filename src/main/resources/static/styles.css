@@ -921,13 +921,30 @@ section p {
 /* Responsividade */
 @media (max-width: 768px) {
     /* Garantir que as fotos dos líderes apareçam em todas as posições no mobile */
-    .leader-photo,
-    tr:not(.position-1):not(.position-2) .leader-photo {
+    /* Estilos para todas as fotos de líderes no mobile */
+    .leader-photo {
         width: 45px !important;
         height: 45px !important;
+        min-width: 45px !important;
+        min-height: 45px !important;
+        max-width: 45px !important;
+        max-height: 45px !important;
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
+        border: 2px solid var(--inv-amarelo) !important;
+    }
+
+    /* Mantém o mesmo tamanho para todas as posições */
+    tr.position-1 .leader-photo,
+    tr.position-2 .leader-photo,
+    tr:not(.position-1):not(.position-2) .leader-photo {
+        width: 45px !important;
+        height: 45px !important;
+        min-width: 45px !important;
+        min-height: 45px !important;
+        max-width: 45px !important;
+        max-height: 45px !important;
     }
     h1 {
         font-size: 2rem;
@@ -1097,6 +1114,10 @@ section p {
 .leader-photo {
     width: 60px !important;
     height: 60px !important;
+    min-width: 60px !important;
+    min-height: 60px !important;
+    max-width: 60px !important;
+    max-height: 60px !important;
     border-radius: 50%;
     object-fit: cover !important;
     border: 2px solid var(--inv-amarelo);
