@@ -1,12 +1,5 @@
-// Função para garantir URL correta da imagem
-function ensureImageUrl(url) {
-    if (!url) return 'imagem/default-avatar.png';
-    
-    // Se já for uma URL absoluta, retorna como está
-    if (url.startsWith('http') || url.startsWith('https')) {
-        return url;
-    }
-    
+
+  
     // Se começar com barra, remove para evitar dupla barra
     const cleanUrl = url.startsWith('/') ? url.substring(1) : url;
     
@@ -16,12 +9,8 @@ function ensureImageUrl(url) {
     }
     
     return `static/imagem/${cleanUrl}`;
-}
 
-// Função para lidar com erros de carregamento de imagem
-function handleImageError(img) {
-    img.src = 'static/imagem/default-avatar.png';
-}
+
 
 // Configuração do Swiper (Carrossel)
 let swiper;
@@ -168,19 +157,7 @@ async function compartilharRanking() {
             img.dataset.originalSrc = img.src;
             const currentSrc = img.src;
             
-            // Verificar se a URL já é absoluta
-            if (currentSrc.startsWith('http') || currentSrc.startsWith('https')) {
-                img.crossOrigin = 'anonymous';
-                continue; // Manter a URL absoluta
-            }
             
-            // Para URLs relativas, construir a URL absoluta
-            let filename;
-            if (currentSrc.includes('imagem/')) {
-                filename = currentSrc.split('imagem/')[1].split('?')[0];
-            } else {
-                filename = currentSrc.split('/').pop().split('?')[0];
-            }
             
             // Determinar a URL base do servidor
             const baseUrl = window.location.origin;
