@@ -175,22 +175,28 @@ async function compartilharRanking() {
         // Capturar a imagem com configurações otimizadas
         const canvas = await html2canvas(tempContainer, {
             backgroundColor: '#1A1A1A',
-            scale: 2,
+            scale: 4, // Aumentado para 4x para maior qualidade
             useCORS: true,
             allowTaint: false,
             logging: false,
             width: 800,
-            height: tempContainer.offsetHeight
+            height: tempContainer.offsetHeight,
+            imageTimeout: 0,
+            onclone: function(clonedDoc) {
+                Array.from(clonedDoc.images).forEach(img => {
+                    img.style.imageRendering = 'pixelated';
+                });
+            }
         });
 
         // Remove o container temporário
         document.body.removeChild(tempContainer);
 
-        // Converte o canvas para uma URL de dados JPEG
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+        // Converte o canvas para uma URL de dados PNG para melhor qualidade
+        const dataUrl = canvas.toDataURL('image/png');
         const link = document.createElement('a');
         link.href = dataUrl;
-        link.download = 'ranking-rally-das-equipes.jpg';
+        link.download = 'ranking-rally-das-equipes.png';
         
         // Adicionar à página e clicar
         document.body.appendChild(link);
