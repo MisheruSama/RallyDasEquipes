@@ -66,16 +66,6 @@ function carregarRanking() {
                 if (index < 3) {
                     row.classList.add(`position-${index + 1}`);
                 }
-
-                // Formatar a data de atualização
-                const dataAtualização = new Date(equipe.data_atualizacao);
-                const dataFormatada = dataAtualização.toLocaleString('pt-BR', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
                 
                 row.innerHTML = `
                     <td class="text-center">
