@@ -114,11 +114,62 @@ async function compartilharRanking() {
         // Criar um container temporário para a captura
         const tempContainer = document.createElement('div');
         tempContainer.style.backgroundColor = '#1A1A1A';
-        tempContainer.style.padding = '30px';
-        tempContainer.style.width = '1000px'; // Aumentado para 1000px
+        tempContainer.style.padding = '20px';
+        tempContainer.style.width = '1000px';
+        tempContainer.style.borderRadius = '20px';
+        tempContainer.style.border = '4px solid var(--inv-amarelo)';
+        tempContainer.style.margin = '0 auto';
         
         // Clonar o conteúdo do ranking
         const rankingContent = document.querySelector('.ranking-container').cloneNode(true);
+
+        // Aumentar o tamanho das fotos e texto na imagem compartilhada
+        const styleOverrides = document.createElement('style');
+        styleOverrides.textContent = `
+            .ranking-container {
+                transform: scale(1);
+                width: 100% !important;
+            }
+            .leader-photo {
+                width: 80px !important;
+                height: 80px !important;
+                min-width: 80px !important;
+                min-height: 80px !important;
+                border: 3px solid #F5B21B !important;
+            }
+            .table {
+                width: 100% !important;
+                margin: 0 auto !important;
+            }
+            .table td {
+                font-size: 1.2rem !important;
+                padding: 1rem !important;
+                vertical-align: middle !important;
+            }
+            .table th {
+                font-size: 1.3rem !important;
+                padding: 1rem !important;
+                background-color: #4C4C4C !important;
+                color: #F5B21B !important;
+            }
+            .fw-bold {
+                font-size: 1.3rem !important;
+                font-weight: 700 !important;
+            }
+            .position-medal {
+                font-size: 1.4rem !important;
+                font-weight: 700 !important;
+            }
+            small {
+                font-size: 1.2rem !important;
+                color: #F5B21B !important;
+            }
+            .bi-trophy-fill {
+                font-size: 2rem !important;
+                color: #F5B21B !important;
+            }
+        `;
+        rankingContent.appendChild(styleOverrides);
 
         // Preparar as imagens para captura
         const images = rankingContent.getElementsByTagName('img');
@@ -137,11 +188,13 @@ async function compartilharRanking() {
         // Capturar a imagem com configurações otimizadas
         const canvas = await html2canvas(tempContainer, {
             backgroundColor: '#1A1A1A',
-            scale: 2.5, // Aumentado para 2.5 para melhor qualidade
+            scale: 3, // Aumentado para 3 para maior qualidade
             useCORS: true,
             allowTaint: false,
             logging: true,
-            imageTimeout: 0
+            imageTimeout: 0,
+            width: 1200, // Largura fixa
+            height: tempContainer.offsetHeight, // Altura automática
         });
 
         // Remove o container temporário

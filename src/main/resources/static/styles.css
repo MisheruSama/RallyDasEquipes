@@ -179,6 +179,8 @@ h1 {
 .ranking-container .leader-photo {
     width: 60px !important;
     height: 60px !important;
+    min-width: 60px !important;
+    min-height: 60px !important;
     object-fit: cover;
     border-radius: 50%;
     transition: transform 0.3s ease;
@@ -539,8 +541,10 @@ section p {
     }
 
     .leader-photo {
-        width: 30px;
-        height: 30px;
+        width: 45px !important;
+        height: 45px !important;
+        min-width: 45px !important;
+        min-height: 45px !important;
     }
 }
 
@@ -560,8 +564,10 @@ section p {
     }
 
     .leader-photo {
-        width: 25px;
-        height: 25px;
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
     }
 }
 
