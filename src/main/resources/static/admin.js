@@ -1,6 +1,25 @@
 // Estado global para armazenar o modo de edição
 let modoEdicao = false;
 
+// Função para alternar a visibilidade do formulário
+function toggleForm() {
+    const formCard = document.getElementById('formCard');
+    const formTitle = document.getElementById('formTitle');
+    const addButton = document.querySelector('.btn-primary[onclick="toggleForm()"]');
+    
+    if (formCard.style.display === 'none') {
+        formCard.style.display = 'block';
+        formTitle.textContent = modoEdicao ? 'Editar Equipe' : 'Adicionar Nova Equipe';
+        addButton.style.display = 'none';
+        // Rolar suavemente até o formulário
+        formCard.scrollIntoView({ behavior: 'smooth' });
+    } else {
+        formCard.style.display = 'none';
+        addButton.style.display = 'inline-block';
+        limparFormulario();
+    }
+}
+
 // Função para carregar as equipes na tabela administrativa
 function carregarEquipes() {
     fetch('/equipes')
@@ -13,7 +32,7 @@ function carregarEquipes() {
         .then(equipes => {
             // Ordenar equipes por pontos (maior para menor)
             equipes.sort((a, b) => b.ponto - a.ponto);
-            
+
             const tableBody = document.getElementById('admin-table-body');
             tableBody.innerHTML = ''; // Limpar tabela
             
@@ -32,9 +51,6 @@ function carregarEquipes() {
             equipes.forEach((equipe, index) => {
                 const row = document.createElement('tr');
                 const posicao = index + 1;
-                let medalha = '';
-                
-                // Removida a parte das medalhas
                 
                 row.innerHTML = `
                     <td class="text-center">
@@ -65,7 +81,11 @@ function carregarEquipes() {
                     </td>
                     <td>
                         <div class="btn-group" role="group">
-                            <button class="btn btn-warning btn-sm" onclick="editarEquipe(${equipe.id})">
+                            <button class="btn btn-success btn-sm" onclick="abrirModalPontuacao(${equipe.id}, '${equipe.nome_da_equipe}')">
+                                <i class="bi bi-plus-circle-fill me-1"></i>
+                                Pontuar
+                            </button>
+                            <button class="btn btn-warning btn-sm" onclick="iniciarEdicao(${equipe.id})">
                                 <i class="bi bi-pencil-fill me-1"></i>
                                 Editar
                             </button>
@@ -101,8 +121,8 @@ function limparFormulario() {
     mostrarMensagem('Formulário limpo! 🧹', 'info');
 }
 
-// Função para carregar dados de uma equipe no formulário para edição
-function editarEquipe(id) {
+// Função para iniciar edição de uma equipe
+function iniciarEdicao(id) {
     const equipe = Array.from(document.querySelectorAll('#admin-table-body tr')).find(row => {
         return row.querySelector('button').onclick.toString().includes(id);
     });
@@ -116,16 +136,80 @@ function editarEquipe(id) {
         document.getElementById('tribo').value = equipe.cells[5].querySelector('img').src; // Foto da tribo
         modoEdicao = true;
         
-        // Rolar suavemente até o formulário
-        document.querySelector('.admin-form').scrollIntoView({ 
-            behavior: 'smooth' 
-        });
+        // Mostrar o formulário e atualizar o título
+        toggleForm();
+        document.getElementById('formTitle').textContent = 'Editar Equipe';
         
         mostrarMensagem('Equipe carregada para edição! ✏️', 'info');
     } else {
         console.error('Equipe não encontrada na tabela');
         mostrarMensagem('Erro ao carregar equipe para edição.', 'danger');
     }
+}
+
+// Função para abrir o modal de pontuação
+function abrirModalPontuacao(id, nomeEquipe) {
+    document.getElementById('equipePontuacaoId').value = id;
+    document.getElementById('equipeNome').textContent = nomeEquipe;
+    document.getElementById('pontuacaoAdicional').value = '';
+    
+    // Abre o modal
+    const modal = new bootstrap.Modal(document.getElementById('pontuacaoModal'));
+    modal.show();
+}
+
+// Função para adicionar pontuação
+function adicionarPontuacao() {
+    const id = document.getElementById('equipePontuacaoId').value;
+    const pontuacaoAdicional = parseInt(document.getElementById('pontuacaoAdicional').value);
+
+    if (!pontuacaoAdicional || pontuacaoAdicional < 0) {
+        mostrarMensagem('Por favor, insira uma pontuação válida.', 'warning');
+        return;
+    }
+
+    // Encontrar pontuação atual da equipe
+    const equipeRow = Array.from(document.querySelectorAll('#admin-table-body tr')).find(row => {
+        return row.querySelector('button').onclick.toString().includes(id);
+    });
+
+    if (!equipeRow) {
+        mostrarMensagem('Equipe não encontrada.', 'danger');
+        return;
+    }
+
+    const pontuacaoAtual = parseInt(equipeRow.cells[4].querySelector('.badge').textContent);
+    const novaPontuacao = pontuacaoAtual + pontuacaoAdicional;
+
+    // Atualizar pontuação no servidor
+    fetch(`/equipes/atualizar/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: parseInt(id),
+            ponto: novaPontuacao,
+            nome_da_equipe: equipeRow.cells[2].textContent,
+            nome_do_lider: equipeRow.cells[3].textContent,
+            foto_do_lider: equipeRow.cells[1].querySelector('img').src,
+            tribo: equipeRow.cells[5].querySelector('img').src
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            mostrarMensagem(`Pontuação adicionada com sucesso! +${pontuacaoAdicional} pontos 🎉`, 'success');
+            carregarEquipes();
+            // Fecha o modal
+            bootstrap.Modal.getInstance(document.getElementById('pontuacaoModal')).hide();
+        } else {
+            throw new Error('Erro ao atualizar pontuação');
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        mostrarMensagem('Erro ao atualizar pontuação. Por favor, tente novamente.', 'danger');
+    });
 }
 
 // Inicialização da página
@@ -323,28 +407,6 @@ document.getElementById('equipeForm').addEventListener('submit', async function(
         limparFormulario();
         carregarEquipes();
     }
-    then(async response => {
-        const responseText = await response.text();
-        console.log('Resposta do servidor:', responseText);
-        
-        if (response.ok) {
-            mostrarMensagem(
-                modoEdicao 
-                    ? 'Equipe atualizada com sucesso! ✅' 
-                    : 'Equipe adicionada com sucesso! 🎉'
-            );
-            limparFormulario();
-            carregarEquipes();
-        } else {
-            throw new Error(`Erro ao salvar equipe: ${responseText}`);
-        }
-    })
-    .catch(error => {
-        console.error('Erro detalhado:', error);
-        mostrarMensagem(
-            `Erro ao ${modoEdicao ? 'atualizar' : 'adicionar'} equipe. ${error.message}`, 
-            'danger'
-        );
-    });
+
 });
 
