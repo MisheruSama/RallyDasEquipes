@@ -1,4 +1,4 @@
-package com.NacaoInvencivel.RallyDasEquipes.Equipes;
+package com.NacaoInvencivel.RallyDasEquipes.domain.Equipes;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

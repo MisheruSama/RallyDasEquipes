@@ -1,22 +1,14 @@
 package com.NacaoInvencivel.RallyDasEquipes.Controller;
 
-import java.util.List;
-
+import com.NacaoInvencivel.RallyDasEquipes.domain.Equipes.Equipes;
+import com.NacaoInvencivel.RallyDasEquipes.repositories.EquipesRepository;
+import com.NacaoInvencivel.RallyDasEquipes.domain.Equipes.EquipesRequestDTO;
+import com.NacaoInvencivel.RallyDasEquipes.domain.Equipes.EquipesResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import com.NacaoInvencivel.RallyDasEquipes.Equipes.Equipes;
-import com.NacaoInvencivel.RallyDasEquipes.Equipes.EquipesRepository;
-import com.NacaoInvencivel.RallyDasEquipes.Equipes.EquipesRequestDTO;
-import com.NacaoInvencivel.RallyDasEquipes.Equipes.EquipesResponseDTO;
+import java.util.List;
 
 
 @RestController
@@ -27,9 +19,9 @@ public class EquipesController {
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @GetMapping
-    public List<EquipesResponseDTO> getAll(){
-        List<EquipesResponseDTO> equipesList = repository.findAll().stream().map(EquipesResponseDTO::new).toList();
-        return equipesList;
+    public ResponseEntity getAll(){
+        List<EquipesResponseDTO> equipesList = this.repository.findAll().stream().map(EquipesResponseDTO::new).toList();
+        return ResponseEntity.ok(equipesList);
     }
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")

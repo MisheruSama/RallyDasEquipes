@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### VARIAVEIS DE AMBIENTE ###
+.env
+
 ### STS ###
 .apt_generated
 .classpath
