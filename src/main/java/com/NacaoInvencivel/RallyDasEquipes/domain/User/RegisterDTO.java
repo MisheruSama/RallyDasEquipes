@@ -1,4 +1,4 @@
 package com.NacaoInvencivel.RallyDasEquipes.domain.User;
 
-public record RegisterDTO(String login, String password, UserRole role) {
+public record RegisterDTO(String nome, String login, String password, UserRole role) {
 }

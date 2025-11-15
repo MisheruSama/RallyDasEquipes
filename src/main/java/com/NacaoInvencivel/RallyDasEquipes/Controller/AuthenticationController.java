@@ -7,6 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,9 @@ import com.NacaoInvencivel.RallyDasEquipes.infra.security.TokenService;
 import com.NacaoInvencivel.RallyDasEquipes.repositories.UserRepository;
 
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -47,10 +51,29 @@ public class AuthenticationController {
         if(this.repository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.login(), encryptedPassword, data.role());
+        User newUser = new User(data.nome(), data.login(), encryptedPassword, data.role());
 
         this.repository.save(newUser);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<Map<String, Object>> me(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
+            return ResponseEntity.status(401).build();
+        }
+
+        String username = auth.getName();
+        var authorities = auth.getAuthorities().stream().map(a -> a.getAuthority()).toList();
+
+        String nome = null;
+        Object principal = auth.getPrincipal();
+        if (principal instanceof User) {
+            nome = ((User) principal).getNome();
+        }
+
+        return ResponseEntity.ok(Map.of("login", username, "nome", nome, "authorities", authorities));
     }
 }

@@ -1,6 +1,30 @@
 // Estado global para armazenar o modo de edição
 let modoEdicao = false;
 
+// --- Autenticação helper ---
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
+
+function clearCookie(name) {
+    document.cookie = `${name}=;path=/;max-age=0`;
+}
+
+function handleAuthClick(e) {
+    e.preventDefault();
+    const token = getCookie('token');
+    if (token) {
+        // logout client-side (stateless JWT)
+        clearCookie('token');
+        window.location.href = '/login.html';
+    } else {
+        window.location.href = '/login.html';
+    }
+}
+
 // Função para alternar a visibilidade do formulário
 function toggleForm() {
     const formCard = document.getElementById('formCard');
@@ -214,17 +238,32 @@ function adicionarPontuacao() {
 
 // Inicialização da página
 document.addEventListener('DOMContentLoaded', () => {
-    carregarEquipes();
-    
-    // Adicionar efeito de hover nos botões
-    document.querySelectorAll('.btn').forEach(btn => {
-        btn.addEventListener('mouseover', function() {
-            this.style.transform = 'translateY(-2px)';
+    // Verificar autenticação e obter nome do usuário
+    fetch('/auth/me')
+        .then(response => {
+            if (!response.ok) throw new Error('Não autenticado');
+            return response.json();
+        })
+        .then(data => {
+            const nome = data.nome || data.login || 'Usuário';
+            const nameEl = document.getElementById('adminName');
+            if (nameEl) nameEl.textContent = nome;
+            carregarEquipes();
+
+            // Adicionar efeito de hover nos botões
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('mouseover', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                btn.addEventListener('mouseout', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        })
+        .catch(err => {
+            console.error('Usuário não autenticado, redirecionando para /login.html', err);
+            window.location.href = '/login.html';
         });
-        btn.addEventListener('mouseout', function() {
-            this.style.transform = 'translateY(0)';
-        });
-    });
 });
 
 
